@@ -1,17 +1,22 @@
 package christmas.controller;
 
 import static christmas.view.input.InputView.inputDate;
+import static christmas.view.input.InputView.inputMenu;
 import static christmas.view.output.OutputView.printErrorMessage;
 import static christmas.view.output.OutputView.printMessage;
 
-import christmas.domain.Plan;
+import christmas.domain.PlanDate;
+import christmas.domain.PlanMenu;
+import christmas.view.input.dto.InputMenuDto;
 import christmas.view.output.Output;
+import java.util.List;
 
 public class WoowaPlanner {
 
     public void run() {
         printMessage(Output.INTRODUCE_WOOWA_PLANNER);
         userPlanDate();
+        userPlanMenu();
     }
 
     private void userPlanDate() {
@@ -19,7 +24,7 @@ public class WoowaPlanner {
     }
 
     private void userPlanMenu() {
-
+        planMenuGet();
     }
 
     private void planDateGet() {
@@ -35,7 +40,7 @@ public class WoowaPlanner {
 
     private void visitDateCheck(int date) {
         try {
-            Plan.setPlan(date);
+            PlanDate.setPlan(date);
         } catch (IllegalArgumentException e) {
             printErrorMessage(e);
             userPlanDate();
@@ -43,17 +48,17 @@ public class WoowaPlanner {
     }
 
     private void planMenuGet() {
-        printMessage(Output.ORDER_MENU_AND_AMOUNT);
-        /*
-         * - input
-         *   1. '-'를 기준으로 나누기
-         *   2. 뒤가 숫자인지 확인하기
-         * */
+        try {
+            printMessage(Output.ORDER_MENU_AND_AMOUNT);
+            List<InputMenuDto> menus = inputMenu();
+            menuCheck(menus);
+        } catch (IllegalArgumentException e) {
+            printErrorMessage(e);
+            userPlanMenu();
+        }
+    }
 
-        // 1. 중복 확인 하기
-        // 2. 20개 초과인지 확인하기
-        // 3. 있는 메뉴인지 확인하기
-        // 4. 1이상인지 확인하기
-        // 5. 음료만 있는지 확인하기
+    private void menuCheck(List<InputMenuDto> menus) {
+        PlanMenu.createPlanMenu(menus);
     }
 }
