@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class PlanTest {
+public class PlanDateTest {
 
     @DisplayName("1~31 사이의 날짜가 아닌 경우 에러를 출력하는지 확인")
     @ParameterizedTest
@@ -17,7 +17,7 @@ public class PlanTest {
     void createPlanWithNotPossibleDateTest(int date) {
         Assertions.assertSimpleTest(() -> {
 
-            assertThrows(InputIllegalException.class, () -> Plan.setPlan(date));
+            assertThrows(InputIllegalException.class, () -> PlanDate.setPlan(date));
         });
     }
 }
