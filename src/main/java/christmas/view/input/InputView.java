@@ -23,6 +23,7 @@ public class InputView {
     }
 
     private static List<InputMenuDto> menuToMap(final String menus) {
+        validateNotEmpty(menus);
 
         return COMPILE_REGEX.splitAsStream(menus)
                 .map(InputView::insertToDto).toList();
@@ -66,7 +67,7 @@ public class InputView {
     }
 
     private static void validateNotEmpty(final String menu) {
-        if (menu.isEmpty()) {
+        if (menu.isBlank()) {
             throw new InputIllegalException(InputError.NOT_POSSIBLE_ORDER);
         }
     }
