@@ -9,12 +9,21 @@ import org.junit.jupiter.api.Test;
 
 public class WoowaPlannerTest extends NsTest {
 
-    @DisplayName("에러 후 재입력을 받는지 Test")
+    @DisplayName("잘못된 날짜 입력값을 입력한 경우 재입력 Test")
     @Test
-    void inputNotPossibleDate() {
+    void inputNotPossibleDateTest() {
         assertSimpleTest(() -> {
             run("a", "1");
             assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @DisplayName("잘못된 메뉴 입력값을 입력한 경우 재입력 Test")
+    @Test
+    void inputNotSplitMenuTest() {
+        assertSimpleTest(() -> {
+            run("1", "티본스테이크-3,제로콜라-1아이스크림-4", "해산물파스타-2,레드와인-1,초코케이크-1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         });
     }
 
