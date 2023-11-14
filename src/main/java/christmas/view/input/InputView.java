@@ -38,7 +38,7 @@ public class InputView {
 
         validateInputMenus(menuName, count);
 
-        return new InputMenuDto(MenuBoard.getMenuBoardByName(menuName), count);
+        return MenuBoard.getDtoByName(menuName, count);
     }
 
     private static List<String> splitMenus(final String menu) {
