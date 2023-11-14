@@ -3,20 +3,20 @@ package christmas.domain;
 import christmas.view.input.error.InputError;
 import christmas.view.input.error.InputIllegalException;
 
-public class Plan {
+public class PlanDate {
 
     private static final int EVENT_START_DATE = 1;
     private static final int EVENT_END_DATE = 31;
 
     private final int visitDate;
 
-    private Plan(final int visitDate) {
+    private PlanDate(final int visitDate) {
         this.visitDate = visitDate;
     }
 
-    public static Plan setPlan(final int visitDate) {
+    public static PlanDate setPlan(final int visitDate) {
         validateDate(visitDate);
-        return new Plan(visitDate);
+        return new PlanDate(visitDate);
     }
 
     private static void validateDate(int visitDate) {
