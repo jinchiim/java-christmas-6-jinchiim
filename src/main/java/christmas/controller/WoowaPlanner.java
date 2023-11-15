@@ -5,6 +5,7 @@ import static christmas.view.input.InputView.inputMenu;
 import static christmas.view.output.OutputView.printErrorMessage;
 import static christmas.view.output.OutputView.printMessage;
 
+import christmas.domain.EventOutput;
 import christmas.domain.PlanDate;
 import christmas.domain.PlanMenu;
 import christmas.view.input.dto.InputMenuDto;
@@ -15,50 +16,63 @@ public class WoowaPlanner {
 
     public void run() {
         printMessage(Output.INTRODUCE_WOOWA_PLANNER);
-        userPlanDate();
-        userPlanMenu();
+
+        planStart();
     }
 
-    private void userPlanDate() {
-        planDateGet();
+    private void planStart() {
+        PlanDate planDate = userPlanDate();
+        PlanMenu planMenu = userPlanMenu();
+
+        userEvents(planMenu, planDate);
     }
 
-    private void userPlanMenu() {
-        planMenuGet();
+    private PlanDate userPlanDate() {
+        return planDateGet();
     }
 
-    private void planDateGet() {
+    private PlanMenu userPlanMenu() {
+        return planMenuGet();
+    }
+
+    private void userEvents(PlanMenu planMenu, PlanDate planDate) {
+        printMessage(Output.PREVIEW_EVENT_BENEFIT);
+        EventOutput eventOutput = EventOutput.show(planMenu, planDate);
+        eventOutput.showAllEvents();
+    }
+
+    private PlanDate planDateGet() {
         try {
             printMessage(Output.INPUT_EXPECTED_VISIT_DATE);
             int date = inputDate();
-            visitDateCheck(date);
+            return visitDateCheck(date);
         } catch (IllegalArgumentException e) {
             printErrorMessage(e);
-            userPlanDate();
+            return userPlanDate();
         }
     }
 
-    private void visitDateCheck(int date) {
+    private PlanDate visitDateCheck(int date) {
         try {
-            PlanDate.setPlan(date);
+            return PlanDate.createPlan(date);
         } catch (IllegalArgumentException e) {
             printErrorMessage(e);
-            userPlanDate();
+            return userPlanDate();
         }
     }
 
-    private void planMenuGet() {
+    private PlanMenu planMenuGet() {
         try {
             printMessage(Output.ORDER_MENU_AND_AMOUNT);
             List<InputMenuDto> menus = inputMenu();
-            menuCheck(menus);
+            return menuCheck(menus);
         } catch (IllegalArgumentException e) {
             printErrorMessage(e);
-            userPlanMenu();
+            return userPlanMenu();
         }
     }
 
-    private void menuCheck(List<InputMenuDto> menus) {
-        PlanMenu.createPlanMenu(menus);
+    private PlanMenu menuCheck(List<InputMenuDto> menus) {
+        return PlanMenu.createPlanMenu(menus);
     }
 }
