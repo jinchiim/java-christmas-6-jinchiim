@@ -45,4 +45,9 @@ public class PlanDate {
     private static boolean isNotEventDate(int visitDate) {
         return visitDate < EVENT_START_DATE || visitDate > EVENT_END_DATE;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.visitDate);
+    }
 }
