@@ -13,7 +13,7 @@ public class WoowaPlannerTest extends NsTest {
     @Test
     void inputNotPossibleDateTest() {
         assertSimpleTest(() -> {
-            run("a", "1");
+            run("a", "1", "해산물파스타-2,레드와인-1,초코케이크-1");
             assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
         });
     }

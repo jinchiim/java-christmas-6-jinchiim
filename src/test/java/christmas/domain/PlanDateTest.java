@@ -17,7 +17,7 @@ public class PlanDateTest {
     void createPlanWithNotPossibleDateTest(int date) {
         Assertions.assertSimpleTest(() -> {
 
-            assertThrows(InputIllegalException.class, () -> PlanDate.setPlan(date));
+            assertThrows(InputIllegalException.class, () -> PlanDate.createPlan(date));
         });
     }
 }
