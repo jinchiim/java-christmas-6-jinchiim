@@ -36,7 +36,6 @@ public class WoowaPlanner {
     }
 
     private void userEvents(PlanMenu planMenu, PlanDate planDate) {
-        printMessage(Output.PREVIEW_EVENT_BENEFIT);
         EventOutput eventOutput = EventOutput.show(planMenu, planDate);
         eventOutput.showAllEvents();
     }
