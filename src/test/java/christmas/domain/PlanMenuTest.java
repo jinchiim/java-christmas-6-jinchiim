@@ -1,8 +1,10 @@
 package christmas.domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import camp.nextstep.edu.missionutils.test.Assertions;
+import christmas.domain.dto.DateEventDto;
 import christmas.view.input.dto.InputMenuDto;
 import christmas.view.input.error.InputIllegalException;
 import java.util.List;
@@ -48,6 +50,26 @@ public class PlanMenuTest {
             );
 
             assertThrows(InputIllegalException.class, () -> PlanMenu.createPlanMenu(menus));
+        });
+    }
+
+    @DisplayName("개수를 제대로 가져오는지 확인 ")
+    @Test
+    void getAccurateDessertAmount() {
+        Assertions.assertSimpleTest(() -> {
+            List<InputMenuDto> menus = List.of(
+                    new InputMenuDto(MenuBoard.CHOCOLATE_CAKE, 2),
+                    new InputMenuDto(MenuBoard.ICE_CREAM, 3),
+                    new InputMenuDto(MenuBoard.CHRISTMAS_PASTA, 1)
+            );
+
+            PlanMenu planMenu = PlanMenu.createPlanMenu(menus);
+
+            DateEventDto weekDayDto = planMenu.calculateTotalWeekDayDiscount();
+            DateEventDto weekendDayDto = planMenu.calculateTotalWeekendDiscount();
+
+            assertEquals(weekDayDto.discount(), 5);
+            assertEquals(weekendDayDto.discount(), 1);
         });
     }
 }
