@@ -1,6 +1,7 @@
 package christmas.domain;
 
 import static christmas.view.output.OutputView.printEventSymbolMessage;
+import static christmas.view.output.OutputView.printMessage;
 import static christmas.view.output.OutputView.printMoneyMessage;
 import static christmas.view.output.OutputView.printStringEventMessage;
 
@@ -20,6 +21,7 @@ public class EventOutput {
     private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###");
     private final static String MINUS = "-";
     private final static String NO_EVENTS = "없음";
+    private final static int NO_DISCOUNT = 0;
 
     private final PlanMenu planMenu;
     private final PlanDate planDate;
@@ -40,6 +42,7 @@ public class EventOutput {
     }
 
     public void showAllEvents() {
+        printMessage(Output.PREVIEW_EVENT_BENEFIT, planDate.toString());
         showOrderedMenu();
         showOrderedPriceMessage();
         showChampagneAmount();
@@ -74,13 +77,19 @@ public class EventOutput {
         int totalDiscount = eventCalculator.totalDiscountCalculator(christmasDiscount, champagneDiscount,
                 dateDiscount, starDiscount);
 
+        if (totalDiscount == NO_DISCOUNT) {
+            printStringEventMessage(NO_EVENTS);
+        }
+
         showTotalDiscountEvent(totalDiscount);
     }
 
     private int showChristMasEvent() {
         int christmasDiscount = planDate.getChristmasEventDiscountMoney();
 
-        printMoneyMessage(CHRISTMAS_BENEFIT_MESSAGE + MINUS + formatNumber(christmasDiscount));
+        if (christmasDiscount > NO_DISCOUNT) {
+            printMoneyMessage(CHRISTMAS_BENEFIT_MESSAGE + checkDiscountAmount(christmasDiscount));
+        }
 
         return christmasDiscount;
     }
@@ -90,7 +99,9 @@ public class EventOutput {
 
         int dateDiscount = eventCalculator.dateEventCalculator(eventDto.discount());
 
-        printMoneyMessage(eventDto.dateType() + MINUS + formatNumber(dateDiscount));
+        if (dateDiscount > NO_DISCOUNT) {
+            printMoneyMessage(eventDto.dateType() + MINUS + formatNumber(dateDiscount));
+        }
 
         return dateDiscount;
     }
@@ -100,17 +111,17 @@ public class EventOutput {
             printMoneyMessage(STAR_BENEFIT_MESSAGE + MINUS + formatNumber(STAR_BENEFIT_DISCOUNT));
             return STAR_BENEFIT_DISCOUNT;
         }
-        return 0;
+        return NO_DISCOUNT;
     }
 
     private int showChampagneEvent() {
-        if (champagneAmount > 0) {
+        if (champagneAmount > NO_DISCOUNT) {
             int champagneDiscount = MenuBoard.calculateTotalChampagnePrice(champagneAmount);
             printMoneyMessage(CHAMPAGNE_BENEFIT_MESSAGE + MINUS + formatNumber(champagneDiscount));
 
             return champagneDiscount;
         }
-        return 0;
+        return NO_DISCOUNT;
     }
 
     private void showTotalDiscountEvent(int discount) {
@@ -140,7 +151,7 @@ public class EventOutput {
 
         if (!eventTarget) {
             printStringEventMessage(NO_EVENTS);
-            showTotalDiscountEvent(0);
+            showTotalDiscountEvent(NO_DISCOUNT);
         }
 
         if (eventTarget) {
@@ -165,7 +176,7 @@ public class EventOutput {
     private String checkDiscountAmount(int discount) {
         String totalDiscountNumber = formatNumber(discount);
 
-        if (discount > 0) {
+        if (discount > NO_DISCOUNT) {
             totalDiscountNumber = MINUS + totalDiscountNumber;
         }
 
