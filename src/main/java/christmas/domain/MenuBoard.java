@@ -4,7 +4,10 @@ import christmas.view.input.dto.InputMenuDto;
 import christmas.view.input.error.InputError;
 import christmas.view.input.error.InputIllegalException;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public enum MenuBoard {
 
@@ -39,6 +42,10 @@ public enum MenuBoard {
         return this.menuType;
     }
 
+    private int getMenuPrice() {
+        return this.menuPrice;
+    }
+
     private static boolean containsMenuName(MenuBoard menuBoard, String menuName) {
         return menuBoard.getMenuName().equals(menuName);
     }
@@ -54,8 +61,54 @@ public enum MenuBoard {
         return new InputMenuDto(getMenuBoardByName(name), count);
     }
 
-    public static boolean isAllMenuTypesDrink(Set<MenuBoard> menuSet) {
-        return menuSet.stream()
+    public static String toMenuEventString(EnumMap<MenuBoard, Integer> menus) {
+        final String BLANK = " ";
+        final String COUNT = "개";
+        final String NEW_LINE = "\n";
+
+        return menus.entrySet().stream()
+                .map(menu -> menu.getKey().getMenuName() + BLANK + menu.getValue() + COUNT)
+                .collect(Collectors.joining(NEW_LINE));
+    }
+
+    public static String toChampagneAmountString(int amount) {
+        final String COUNT = "개";
+        final String BLANK = " ";
+        final String NOTING = "없음";
+
+        String name = CHAMPAGNE.getMenuName();
+
+        if (amount == 0) {
+            return NOTING;
+        }
+
+        return name + BLANK + amount + COUNT;
+    }
+
+    public static boolean isAllMenuTypesDrink(Set<MenuBoard> menus) {
+        return menus.stream()
                 .allMatch(menu -> menu.getMenuType() == MenuType.DRINK);
+    }
+
+    public static int calculateTotalPrice(MenuBoard menu, int quantity) {
+        return menu.getMenuPrice() * quantity;
+    }
+
+    public static int calculateTotalDessertCount(EnumMap<MenuBoard, Integer> menus) {
+        return menus.entrySet().stream()
+                .filter(menu -> menu.getKey().getMenuType() == MenuType.DESSERT)
+                .mapToInt(Map.Entry::getValue)
+                .sum();
+    }
+
+    public static int calculateTotalMainCount(EnumMap<MenuBoard, Integer> menus) {
+        return menus.entrySet().stream()
+                .filter(menu -> menu.getKey().getMenuType() == MenuType.MAIN)
+                .mapToInt(Map.Entry::getValue)
+                .sum();
+    }
+
+    public static int calculateTotalChampagnePrice(int amount) {
+        return CHAMPAGNE.menuPrice * amount;
     }
 }
