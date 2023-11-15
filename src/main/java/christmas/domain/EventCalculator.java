@@ -51,7 +51,7 @@ public class EventCalculator {
     }
 
     public DateEventDto calculateDateDiscountAmount(PlanDate planDate, PlanMenu planMenu) {
-        boolean isWeekDay = planDate.getDateIsWeekDay();
+        boolean isWeekDay = planDate.isWeekDate();
 
         if (isWeekDay) {
             return planMenu.calculateTotalWeekDayDiscount();
