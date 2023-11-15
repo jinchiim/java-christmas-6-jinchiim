@@ -7,6 +7,7 @@ public class PlanDate {
 
     private static final int EVENT_START_DATE = 1;
     private static final int EVENT_END_DATE = 31;
+    private static final int CHRISTMAS_EVENT_END_DATE = 25;
 
     private final int visitDate;
 
@@ -14,9 +15,24 @@ public class PlanDate {
         this.visitDate = visitDate;
     }
 
-    public static PlanDate setPlan(final int visitDate) {
+    public static PlanDate createPlan(final int visitDate) {
         validateDate(visitDate);
         return new PlanDate(visitDate);
+    }
+
+    public boolean isWeekDate() {
+        return WoowaCalender.isWeekDate(visitDate);
+    }
+
+    public boolean isStarDate() {
+        return WoowaCalender.isStarDate(visitDate);
+    }
+
+    public int getChristmasEventDiscountMoney() {
+        if (visitDate > CHRISTMAS_EVENT_END_DATE) {
+            return 0;
+        }
+        return new EventCalculator().christMasEventCalculator(visitDate);
     }
 
     private static void validateDate(int visitDate) {
@@ -29,5 +45,4 @@ public class PlanDate {
     private static boolean isNotEventDate(int visitDate) {
         return visitDate < EVENT_START_DATE || visitDate > EVENT_END_DATE;
     }
-
 }
