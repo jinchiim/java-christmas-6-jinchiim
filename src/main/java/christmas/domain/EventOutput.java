@@ -16,6 +16,7 @@ public class EventOutput {
     private final static String STAR_BENEFIT_MESSAGE = "특별 할인: ";
     private final static String CHAMPAGNE_BENEFIT_MESSAGE = "증정 이벤트: ";
     private final static int STAR_BENEFIT_DISCOUNT = 1000;
+    private final static int CHAMPAGNE_EVENT_AMOUNT = 1;
     private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###");
     private final static String MINUS = "-";
     private final static String NO_EVENTS = "없음";
@@ -43,7 +44,6 @@ public class EventOutput {
         showOrderedPriceMessage();
         showChampagneAmount();
         validateEventTarget();
-        validateOnlyPayMenuPrice();
     }
 
     private void showOrderedMenu() {
@@ -115,8 +115,9 @@ public class EventOutput {
 
     private void showTotalDiscountEvent(int discount) {
         printEventSymbolMessage(Output.TOTAL_BENEFIT_AMOUNT);
-        printMoneyMessage(formatNumber(discount));
+        printMoneyMessage(checkDiscountAmount(discount));
 
+        validateOnlyPayMenuPrice();
         showBadgeEvent(discount);
     }
 
@@ -130,7 +131,7 @@ public class EventOutput {
             eventTarget = false;
         }
         if (totalPrice >= MIN_CHAMPAGNE_EVENT_AMOUNT) {
-            champagneAmount = eventCalculator.calculateChampagneAmount(totalPrice);
+            champagneAmount = CHAMPAGNE_EVENT_AMOUNT;
         }
     }
 
@@ -159,6 +160,16 @@ public class EventOutput {
             int realPayPrice = eventCalculator.totalPayMoneyCalculator(totalPrice);
             printMoneyMessage(formatNumber(realPayPrice));
         }
+    }
+
+    private String checkDiscountAmount(int discount) {
+        String totalDiscountNumber = formatNumber(discount);
+
+        if (discount > 0) {
+            totalDiscountNumber = MINUS + totalDiscountNumber;
+        }
+
+        return totalDiscountNumber;
     }
 
     private String formatNumber(int number) {
