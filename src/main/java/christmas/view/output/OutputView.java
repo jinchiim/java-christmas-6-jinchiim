@@ -19,6 +19,10 @@ public class OutputView {
         System.out.println(outputMessage.message);
     }
 
+    public static void printMessage(Output outputMessage, String date) {
+        System.out.printf((outputMessage.message) + NEW_LINE, date);
+    }
+
     public static void printErrorMessage(IllegalArgumentException e) {
         System.out.println(e.getMessage());
     }
